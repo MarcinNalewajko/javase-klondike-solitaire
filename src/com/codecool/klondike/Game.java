@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -183,11 +184,10 @@ public class Game extends Pane {
     }
 
     public void dealCards() {
-        int a = 0;
 
         for(int i = 1; i < tableauPiles.size() + 1; i++){
-            ArrayList<Card> dealPiles = new ArrayList<>(deck.subList(a, a + i));
-
+            ArrayList<Card> dealPiles = new ArrayList<>(deck.subList(0, i));
+            
             for(int j = 0; j < dealPiles.size(); j++){
                 tableauPiles.get(i-1).addCard(dealPiles.get(j));
                 addMouseEventHandlers(dealPiles.get(j));
