@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -14,6 +15,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -156,6 +158,7 @@ public class Game extends Pane {
         stockPile.setOnMouseClicked(stockReverseCardsHandler);
         getChildren().add(stockPile);
 
+
         discardPile = new Pile(Pile.PileType.DISCARD, "Discard", STOCK_GAP);
         discardPile.setBlurredBackground();
         discardPile.setLayoutX(285);
@@ -181,14 +184,25 @@ public class Game extends Pane {
     }
 
     public void dealCards() {
+
+        for(int i = 1; i < tableauPiles.size() + 1; i++){
+            ArrayList<Card> dealPiles = new ArrayList<>(deck.subList(0, i));
+
+            for(int j = 0; j < dealPiles.size(); j++){
+                tableauPiles.get(i-1).addCard(dealPiles.get(j));
+                addMouseEventHandlers(dealPiles.get(j));
+                dealPiles.get(j).flip();
+                getChildren().add(dealPiles.get(j));
+                deck.remove(dealPiles.get(j));
+            }
+        }
+
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
-
     }
 
     public void setTableBackground(Image tableBackground) {

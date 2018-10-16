@@ -123,6 +123,7 @@ public class Card extends ImageView {
             for (Rank cardRank: Rank.values()){
                 String cardName = suit.getCardSuitName() + cardRank.getCardValue();
                 String cardId = "S" + suit.getCardSuitValue() + "R" + cardRank.getCardValue();
+
                 String imageFileName = "card_images/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }
