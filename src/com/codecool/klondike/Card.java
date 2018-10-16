@@ -1,3 +1,6 @@
+
+
+
 package com.codecool.klondike;
 
 import javafx.scene.effect.DropShadow;
@@ -6,6 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 import java.util.*;
+
+import static java.util.Collections.*;
 
 public class Card extends ImageView {
 
@@ -47,12 +52,14 @@ public class Card extends ImageView {
     }
 
     public String getShortName() {
-        return "S" + suit + "R" + rank;
+        return "S" + suit.getCardSuitValue() + "R" + rank.getCardValue();
     }
 
     public DropShadow getDropShadow() {
         return dropShadow;
     }
+
+
 
     public Pile getContainingPile() {
         return containingPile;
@@ -62,25 +69,37 @@ public class Card extends ImageView {
         this.containingPile = containingPile;
     }
 
+
     public void moveToPile(Pile destPile) {
         this.getContainingPile().getCards().remove(this);
         destPile.addCard(this);
     }
+
 
     public void flip() {
         faceDown = !faceDown;
         setImage(faceDown ? backFace : frontFace);
     }
 
+
     @Override
     public String toString() {
-        return "The " + "Rank" + rank + " of " + "Suit" + suit;
+        return "The " + rank + " of " + suit;
     }
 
+
     public static boolean isOppositeColor(Card card1, Card card2) {
-        //TODO
-        return true;
+        if (card1.suit.getCardSuitValue() <= 2){
+            if (card2.suit.getCardSuitValue() > 2){return true;}
+            else {return false;}
+        }
+        else{
+            if (card2.suit.getCardSuitValue() <= 2){return true;}
+            else {return false;}
+        }
+
     }
+
 
     public static boolean isSameSuit(Card card1, Card card2) {
         return card1.getSuit() == card2.getSuit();
@@ -89,27 +108,26 @@ public class Card extends ImageView {
     public static List<Card> createNewDeck() {
         List<Card> result = new ArrayList<>();
         for (Suit suit : Suit.values()) {
-            for (Rank rank : Rank.values()) {
-                result.add(new Card(suit, rank, true));
+            for (Rank cardRank: Rank.values()){
+                result.add(new Card(suit, cardRank, true));
             }
         }
+        Collections.shuffle(result);
         return result;
     }
 
+
     public static void loadCardImages() {
         cardBackImage = new Image("card_images/card_back.png", 150,215, false,true);
-        String suitName = "";
-        for (Suit cardSuit: Suit.values()) {
-
-
-            for (Rank cardRank : Rank.values()) {
-                String cardName = cardSuit.getCardSuitName() + cardRank.getCardValue();
-                System.out.println(cardName);
-                String cardId = "S" + cardSuit.getCardSuitValue() + "R" + cardRank.getCardValue();
+        for (Suit suit : Suit.values()) {
+            for (Rank cardRank: Rank.values()){
+                String cardName = suit.getCardSuitName() + cardRank.getCardValue();
+                String cardId = "S" + suit.getCardSuitValue() + "R" + cardRank.getCardValue();
                 String imageFileName = "card_images/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }
         }
     }
-
 }
+
+
