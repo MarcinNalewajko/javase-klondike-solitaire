@@ -192,17 +192,21 @@ public class Game extends Pane {
 
     public void dealCards() {
 
-        for(int i = 1; i < tableauPiles.size() + 1; i++){
+        for(int i = 1; i < tableauPiles.size() + 1; i++) {
             ArrayList<Card> dealPiles = new ArrayList<>(deck.subList(0, i));
 
-            for(int j = 0; j < dealPiles.size(); j++){
-                tableauPiles.get(i-1).addCard(dealPiles.get(j));
+            for (int j = 0; j < dealPiles.size(); j++) {
+                tableauPiles.get(i - 1).addCard(dealPiles.get(j));
+
                 addMouseEventHandlers(dealPiles.get(j));
-                dealPiles.get(j).flip();
                 getChildren().add(dealPiles.get(j));
                 deck.remove(dealPiles.get(j));
+
             }
+            tableauPiles.get(i-1).getTopCard().flip();
+
         }
+
 
         Iterator<Card> deckIterator = deck.iterator();
         deckIterator.forEachRemaining(card -> {
