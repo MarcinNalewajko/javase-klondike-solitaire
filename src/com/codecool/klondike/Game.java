@@ -187,7 +187,7 @@ public class Game extends Pane {
 
         for(int i = 1; i < tableauPiles.size() + 1; i++){
             ArrayList<Card> dealPiles = new ArrayList<>(deck.subList(0, i));
-            
+
             for(int j = 0; j < dealPiles.size(); j++){
                 tableauPiles.get(i-1).addCard(dealPiles.get(j));
                 addMouseEventHandlers(dealPiles.get(j));
