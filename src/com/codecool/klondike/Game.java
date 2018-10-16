@@ -128,6 +128,7 @@ public class Game extends Pane {
         //TODO
         Pile.PileType pileType = destPile.getPileType();
         Rank cardRank = card.getRank();
+        Card topCard = destPile.getTopCard();
         if (destPile.isEmpty()) {
 
             if ((pileType == Pile.PileType.FOUNDATION) && (cardRank == Rank.ACE)) {
@@ -136,7 +137,17 @@ public class Game extends Pane {
                 return true;
             }
         } else {
-            
+            if (pileType == Pile.PileType.FOUNDATION) {
+                if ((topCard.getRank().getCardValue() == cardRank.getCardValue() - 1) &&
+                    ((Card.isSameSuit(card, topCard)))){
+                    return true;
+                }
+            } else {
+                if ((topCard.getRank().getCardValue() == cardRank.getCardValue() + 1) &&
+                        ((Card.isOppositeColor(card, topCard)))){
+                    return true;
+                }
+            }
         }
         return false;
     }

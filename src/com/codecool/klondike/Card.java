@@ -109,7 +109,7 @@ public class Card extends ImageView {
         List<Card> result = new ArrayList<>();
         for (Suit suit : Suit.values()) {
             for (Rank cardRank: Rank.values()){
-                System.out.println(cardRank);
+                // System.out.println(cardRank);
                 result.add(new Card(suit, cardRank, true));
             }
         }
