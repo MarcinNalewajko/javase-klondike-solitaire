@@ -14,10 +14,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Game extends Pane {
 
@@ -43,6 +40,7 @@ public class Game extends Pane {
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+
         }
     };
 
@@ -114,6 +112,15 @@ public class Game extends Pane {
 
     public void refillStockFromDiscard() {
         //TODO
+        List<Card> cardsToRefill=discardPile.getCards();
+        Collections.reverse(cardsToRefill);
+        stockPile.clear();
+
+        for (Card card: cardsToRefill){
+            card.flip();
+            stockPile.addCard(card);
+        }
+        discardPile.clear();
         System.out.println("Stock refilled from discard pile.");
     }
 
