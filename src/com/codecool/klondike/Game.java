@@ -56,21 +56,31 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
+
+        if (card.isFaceDown())
+            return;
+
         if (activePile.getPileType() == Pile.PileType.STOCK)
             return;
+
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
         draggedCards.clear();
-        draggedCards.add(card);
+        boolean canDrag = false;
+        for (Card card1: activePile.getCards()) {
+            if (card1 == card) { canDrag = true; }
+            if (canDrag) {
+                draggedCards.add(card1);
+                card1.getDropShadow().setRadius(20);
+                card1.getDropShadow().setOffsetX(10);
+                card1.getDropShadow().setOffsetY(10);
 
-        card.getDropShadow().setRadius(20);
-        card.getDropShadow().setOffsetX(10);
-        card.getDropShadow().setOffsetY(10);
-
-        card.toFront();
-        card.setTranslateX(offsetX);
-        card.setTranslateY(offsetY);
+                card1.toFront();
+                card1.setTranslateX(offsetX);
+                card1.setTranslateY(offsetY);
+            }
+        }
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
@@ -91,6 +101,10 @@ public class Game extends Pane {
 
 
     };
+
+//    public void animate(Card card) {
+//
+//    }
 
     public boolean isGameWon() {
         //TODO
@@ -137,6 +151,7 @@ public class Game extends Pane {
                 return true;
             }
         } else {
+
             if (pileType == Pile.PileType.FOUNDATION) {
                 if ((topCard.getRank().getCardValue() == cardRank.getCardValue() - 1) &&
                     ((Card.isSameSuit(card, topCard)))){
