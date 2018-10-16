@@ -31,6 +31,10 @@ public class Pile extends Pane {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public double getCardGap() {
         return cardGap;
     }
@@ -70,6 +74,14 @@ public class Pile extends Pane {
         else
             return cards.get(cards.size() - 1);
     }
+
+    public Card getSecondCard() {
+        if (cards.isEmpty())
+            return null;
+        else
+            return cards.get(cards.size() - 2);
+    }
+
 
     public void setBlurredBackground() {
         setPrefSize(Card.WIDTH, Card.HEIGHT);

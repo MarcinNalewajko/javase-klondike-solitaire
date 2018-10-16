@@ -25,6 +25,7 @@ public class Game extends Pane {
 
     private Pile stockPile;
     private Pile discardPile;
+    private Pile activePile;
     private List<Pile> foundationPiles = FXCollections.observableArrayList();
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
 
@@ -53,15 +54,18 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMousePressedHandler = e -> {
         dragStartX = e.getSceneX();
         dragStartY = e.getSceneY();
+
     };
 
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
-        Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK)
+        activePile = card.getContainingPile();
+        if (activePile.getPileType() == Pile.PileType.STOCK) {
             return;
+        }
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
+
 
         draggedCards.clear();
         draggedCards.add(card);
@@ -73,6 +77,7 @@ public class Game extends Pane {
         card.toFront();
         card.setTranslateX(offsetX);
         card.setTranslateY(offsetY);
+
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
@@ -80,13 +85,20 @@ public class Game extends Pane {
             return;
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
+
         //TODO
         if (pile != null) {
             handleValidMove(card, pile);
+            Card secondCard = activePile.getSecondCard();
+            if(secondCard.isFaceDown()){
+                secondCard.flip();
+            }
+//
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = null;
+            draggedCards.clear();
         }
+
     };
 
     public boolean isGameWon() {
@@ -132,6 +144,7 @@ public class Game extends Pane {
             return card.getBoundsInParent().intersects(pile.getBoundsInParent());
         else
             return card.getBoundsInParent().intersects(pile.getTopCard().getBoundsInParent());
+
     }
 
     private void handleValidMove(Card card, Pile destPile) {
@@ -196,6 +209,7 @@ public class Game extends Pane {
                 deck.remove(dealPiles.get(j));
 
             }
+            tableauPiles.get(i-1).setName(String.valueOf(i));
             tableauPiles.get(i-1).getTopCard().flip();
 
         }
