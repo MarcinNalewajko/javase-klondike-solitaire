@@ -109,10 +109,9 @@ public class Game extends Pane {
     public boolean isGameWon() {
         //TODO
         for (int it = 0; it < foundationPiles.size(); it++) {
-            if (foundationPiles.get(it).numOfCards() < 13) {
+            if ((foundationPiles.get(it).isEmpty()) || (foundationPiles.get(it).getTopCard().getRank() != Rank.KING))  {
                 break;
             } else {
-                // System.out.println("WON WON WON");
                 if (it == 3) { return true;}
             }
         }
@@ -172,7 +171,7 @@ public class Game extends Pane {
                 }
             }
         }
-        return true;
+        return false;
     }
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
@@ -230,10 +229,6 @@ public class Game extends Pane {
               draggedCard.moveToPile(destPile);
         }
         draggedCards.clear();
-                                // this is to check out contents of destPile
-        for (Card card2 : destPile.getCards()) {
-            System.out.println(card2);
-        }
     }
 
 
