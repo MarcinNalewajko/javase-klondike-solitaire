@@ -20,6 +20,7 @@ public class Pile extends Pane {
 
     public Pile(PileType pileType, String name, double cardGap) {
         this.pileType = pileType;
+        this.name=name;
         this.cardGap = cardGap;
     }
 
@@ -73,7 +74,7 @@ public class Pile extends Pane {
 
     public void setBlurredBackground() {
         setPrefSize(Card.WIDTH, Card.HEIGHT);
-        BackgroundFill backgroundFill = new BackgroundFill(Color.gray(0.0, 0.2), null, null);
+        BackgroundFill backgroundFill = new BackgroundFill(Color.gray(0.0, 0.4), null, null);
         Background background = new Background(backgroundFill);
         GaussianBlur gaussianBlur = new GaussianBlur(10);
         setBackground(background);

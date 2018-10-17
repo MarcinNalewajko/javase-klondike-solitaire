@@ -119,14 +119,15 @@ public class Card extends ImageView {
 
 
     public static void loadCardImages() {
-        cardBackImage = new Image("card_images/card_back.png", 150,215, false,true);
+        cardBackImage = new Image("card_images/Back/6/card_back.png", 150,215, false,true);
         for (Suit suit : Suit.values()) {
             for (Rank cardRank: Rank.values()){
                 String cardName = suit.getCardSuitName() + cardRank.getCardValue();
                 String cardId = "S" + suit.getCardSuitValue() + "R" + cardRank.getCardValue();
 
-                String imageFileName = "card_images/" + cardName + ".png";
-                cardFaceImages.put(cardId, new Image(imageFileName));
+                String imageFileName = "card_images/Front/2/" + cardName + ".png";
+                System.out.println(cardName);
+                cardFaceImages.put(cardId, new Image(imageFileName,150,215, false,true));
             }
         }
     }

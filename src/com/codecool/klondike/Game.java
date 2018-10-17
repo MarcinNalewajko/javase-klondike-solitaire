@@ -231,6 +231,7 @@ public class Game extends Pane {
             tableauPile.setLayoutY(275);
             tableauPiles.add(tableauPile);
             getChildren().add(tableauPile);
+            System.out.println(tableauPile.getName());
         }
     }
 
