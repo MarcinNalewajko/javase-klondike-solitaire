@@ -79,7 +79,7 @@ public class Pile extends Pane {
         if (cards.isEmpty())
             return null;
         else
-            return cards.get(cards.size() - 2);
+            return cards.get(cards.size() - 1);
     }
 
 

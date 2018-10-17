@@ -28,7 +28,6 @@ public class Klondike extends Application {
         restartButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("1");
                 start(primaryStage);
             }
         });
