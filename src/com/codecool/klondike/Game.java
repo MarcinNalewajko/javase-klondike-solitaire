@@ -37,6 +37,7 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
+        if (e.getClickCount() == 2) {System.out.println("Double click");}
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
             card.flip();
@@ -110,7 +111,7 @@ public class Game extends Pane {
     public boolean isGameWon() {
         //TODO
         for (int it = 0; it < foundationPiles.size(); it++) {
-            if ((foundationPiles.get(it).isEmpty()) || (foundationPiles.get(it).getTopCard().getRank() != Rank.KING))  {
+            if ((foundationPiles.get(it).isEmpty()) || (foundationPiles.get(it).getTopCard().getRank() != Rank.KING)) {
                 break;
             } else {
                 if (it == 3) { return true;}
