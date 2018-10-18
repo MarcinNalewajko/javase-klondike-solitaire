@@ -14,6 +14,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
+import javax.sound.midi.Soundbank;
 import java.util.*;
 
 public class Game extends Pane {
@@ -49,6 +50,7 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
+        if (e.getClickCount() == 2) {System.out.println("Double click");}
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
             card.flip();
@@ -79,7 +81,6 @@ public class Game extends Pane {
 
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
-
         draggedCards.clear();
         boolean canDrag = false;
         for (Card card1: activePile.getCards()) {
@@ -106,22 +107,29 @@ public class Game extends Pane {
         Pile pileUpper = getValidIntersectingPile(card, foundationPiles);
         if (pile != null) {
             handleValidMove(card, pile);
+
         } else if (pileUpper != null) {
             handleValidMove(card, pileUpper);
+
+            if (isGameWon()) {
+                System.out.println("WON WON WON");
+            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
-
-
     };
 
-//    public void animate(Card card) {
-//
-//    }
 
     public boolean isGameWon() {
         //TODO
+        for (int it = 0; it < foundationPiles.size(); it++) {
+            if ((foundationPiles.get(it).isEmpty()) || (foundationPiles.get(it).getTopCard().getRank() != Rank.KING)) {
+                break;
+            } else {
+                if (it == 3) { return true;}
+            }
+        }
         return false;
     }
 
@@ -199,6 +207,24 @@ public class Game extends Pane {
             return card.getBoundsInParent().intersects(pile.getTopCard().getBoundsInParent());
     }
 
+    private void flipTopOfThePreviousPile(Card card, List<Card> draggedCards) {
+        System.out.println("Dragged cards size: " + Integer.toString(draggedCards.size()));
+
+        List<Card> cardsFromPreviousPile = card.getContainingPile().getCards();
+        System.out.println("cardsFromPreviousPile size: " + Integer.toString(cardsFromPreviousPile.size()));
+
+        int indexOfACardToFlip = cardsFromPreviousPile.size() - (draggedCards.size() + 1);
+
+        if (indexOfACardToFlip < 0) {indexOfACardToFlip = 0;}
+        System.out.println("indexOfACardToFlip: " + Integer.toString(indexOfACardToFlip));
+
+        if ((card.getContainingPile().getPileType() == Pile.PileType.TABLEAU) &&
+                (card.getContainingPile().numOfCards() > 1) &&
+                (cardsFromPreviousPile.get(indexOfACardToFlip).isFaceDown())) {
+            cardsFromPreviousPile.get(indexOfACardToFlip).flip();
+        }
+    }
+
     private void handleValidMove(Card card, Pile destPile) {
         String msg = null;
         if (destPile.isEmpty()) {
@@ -210,7 +236,13 @@ public class Game extends Pane {
             msg = String.format("Placed %s to %s.", card, destPile.getTopCard());
         }
         System.out.println(msg);
-        MouseUtil.slideToDest(draggedCards, destPile);
+        // MouseUtil.slideToDest(draggedCards, destPile);       this had to be disabled
+
+        flipTopOfThePreviousPile(card, draggedCards);
+
+        for (Card draggedCard: draggedCards) {
+              draggedCard.moveToPile(destPile);
+        }
         draggedCards.clear();
     }
 
