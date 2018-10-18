@@ -3,6 +3,7 @@ package com.codecool.klondike;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -19,7 +20,9 @@ import java.util.*;
 
 public class Game extends Pane {
 
-    private List<Card> deck = new ArrayList<>();
+    private List<Card> deck;
+
+    private boolean isGameOn = true;
 
     private Pile stockPile;
     private Pile discardPile;
@@ -36,8 +39,11 @@ public class Game extends Pane {
 
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
+        if (!isGameOn) return;
         Card card = (Card) e.getSource();
-        if (e.getClickCount() == 2) {System.out.println("Double click");}
+        if (e.getClickCount() == 2) {
+            System.out.println("Double click");
+        }
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
             card.flip();
@@ -45,18 +51,23 @@ public class Game extends Pane {
             System.out.println("Placed " + card + " to the waste.");
 
         }
+
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
+        if (!isGameOn) return;
         refillStockFromDiscard();
     };
 
     private EventHandler<MouseEvent> onMousePressedHandler = e -> {
+        if (!isGameOn) return;
         dragStartX = e.getSceneX();
         dragStartY = e.getSceneY();
+
     };
 
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
+        if (!isGameOn) return;
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
 
@@ -86,6 +97,7 @@ public class Game extends Pane {
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
+        if (!isGameOn) return;
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
@@ -99,7 +111,9 @@ public class Game extends Pane {
             handleValidMove(card, pileUpper);
 
             if (isGameWon()) {
+                this.isGameOn = false;
                 System.out.println("WON WON WON");
+                Klondike.addEndLabel();
             }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
@@ -195,15 +209,11 @@ public class Game extends Pane {
     }
 
     private void flipTopOfThePreviousPile(Card card, List<Card> draggedCards) {
-        System.out.println("Dragged cards size: " + Integer.toString(draggedCards.size()));
 
         List<Card> cardsFromPreviousPile = card.getContainingPile().getCards();
-        System.out.println("cardsFromPreviousPile size: " + Integer.toString(cardsFromPreviousPile.size()));
 
         int indexOfACardToFlip = cardsFromPreviousPile.size() - (draggedCards.size() + 1);
-
         if (indexOfACardToFlip < 0) {indexOfACardToFlip = 0;}
-        System.out.println("indexOfACardToFlip: " + Integer.toString(indexOfACardToFlip));
 
         if ((card.getContainingPile().getPileType() == Pile.PileType.TABLEAU) &&
                 (card.getContainingPile().numOfCards() > 1) &&
@@ -264,7 +274,6 @@ public class Game extends Pane {
             tableauPile.setLayoutY(275);
             tableauPiles.add(tableauPile);
             getChildren().add(tableauPile);
-            System.out.println(tableauPile.getName());
         }
     }
 

@@ -3,11 +3,16 @@ package com.codecool.klondike;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.sql.SQLOutput;
@@ -23,6 +28,15 @@ public class Klondike extends Application {
     private int backAmount=6;
     private static final double WINDOW_WIDTH = 1400;
     private static final double WINDOW_HEIGHT = 900;
+    private static Scene scene;
+
+    public static void addEndLabel() {
+
+        Node endGameId = ((Scene) scene).lookup("#endGame");
+        Label endGameLabel = (Label) endGameId;
+        endGameLabel.setText("Congratulations, you win!");
+        endGameLabel.toFront();
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -38,8 +52,14 @@ public class Klondike extends Application {
         VBox vBox = new VBox(menuBar);
         menuBar.getMenus().add(menu);
 
+        Label endGameLabel = new Label();
 
-
+        endGameLabel.setId("endGame");
+        endGameLabel.setFont(new Font("System", 50));
+        endGameLabel.setStyle("-fx-background-color: #e3e3e3");
+        endGameLabel.setTranslateX(500);
+        endGameLabel.setTranslateY(400);
+        game.getChildren().add(endGameLabel);
 
         MenuItem restart = new MenuItem("Restart");
         MenuItem changeBG = new MenuItem("Change Backgorund");
@@ -57,7 +77,6 @@ public class Klondike extends Application {
         restart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                // System.out.println("1");
                 start(primaryStage);
             }
         });
@@ -112,7 +131,8 @@ public class Klondike extends Application {
         game.setTableBackground(new Image("/table/"+currentBackground+".png",1400,900,false,true));
 
         primaryStage.setTitle("Klondike Solitaire");
-        primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
+        scene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

@@ -111,7 +111,6 @@ public class Card extends ImageView {
         List<Card> result = new ArrayList<>();
         for (Suit suit : Suit.values()) {
             for (Rank cardRank: Rank.values()){
-                // System.out.println(cardRank);
                 result.add(new Card(suit, cardRank, true));
             }
         }
@@ -128,7 +127,6 @@ public class Card extends ImageView {
                 String cardId = "S" + suit.getCardSuitValue() + "R" + cardRank.getCardValue();
 
                 String imageFileName = pathFront + cardName + ".png";
-                System.out.println(cardName);
                 cardFaceImages.put(cardId, new Image(imageFileName,WIDTH,HEIGHT, false,true));
             }
         }
