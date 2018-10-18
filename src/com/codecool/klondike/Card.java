@@ -23,6 +23,8 @@ public class Card extends ImageView {
     private Pile containingPile;
     private DropShadow dropShadow;
 
+
+
     static Image cardBackImage;
     private static final Map<String, Image> cardFaceImages = new HashMap<>();
     public static final int WIDTH = 150;
@@ -118,15 +120,16 @@ public class Card extends ImageView {
     }
 
 
-    public static void loadCardImages() {
-        cardBackImage = new Image("card_images/card_back.png", 150,215, false,true);
+    public static void loadCardImages(String pathBack, String pathFront) {
+        cardBackImage = new Image(pathBack+"card_back.png", WIDTH,HEIGHT, false,true);
         for (Suit suit : Suit.values()) {
             for (Rank cardRank: Rank.values()){
                 String cardName = suit.getCardSuitName() + cardRank.getCardValue();
                 String cardId = "S" + suit.getCardSuitValue() + "R" + cardRank.getCardValue();
 
-                String imageFileName = "card_images/" + cardName + ".png";
-                cardFaceImages.put(cardId, new Image(imageFileName));
+                String imageFileName = pathFront + cardName + ".png";
+                System.out.println(cardName);
+                cardFaceImages.put(cardId, new Image(imageFileName,WIDTH,HEIGHT, false,true));
             }
         }
     }

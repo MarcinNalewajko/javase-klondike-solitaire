@@ -34,6 +34,7 @@ public class Game extends Pane {
     private static double TABLEAU_GAP = 30;
 
 
+
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
@@ -262,6 +263,7 @@ public class Game extends Pane {
             tableauPile.setLayoutY(275);
             tableauPiles.add(tableauPile);
             getChildren().add(tableauPile);
+            System.out.println(tableauPile.getName());
         }
     }
 
