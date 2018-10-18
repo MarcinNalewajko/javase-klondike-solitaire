@@ -7,9 +7,11 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Popup;
@@ -33,9 +35,15 @@ public class Klondike extends Application {
     public static void addEndLabel() {
 
         Node endGameId = ((Scene) scene).lookup("#endGame");
-        Label endGameLabel = (Label) endGameId;
-        endGameLabel.setText("Congratulations, you win!");
-        endGameLabel.toFront();
+        Pane pane=(Pane) endGameId;
+
+
+        final ImageView selectedImage = new ImageView();
+        Image image1 = new Image("win.png");
+        selectedImage.setImage(image1);
+
+        pane.getChildren().addAll(selectedImage);
+
     }
 
     public static void main(String[] args) {
@@ -46,27 +54,21 @@ public class Klondike extends Application {
     public void start(Stage primaryStage) {
 
         Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");
-        System.out.println(Card.cardBackImage);
         Game game = new Game();
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("Menu");
         VBox vBox = new VBox(menuBar);
         menuBar.getMenus().add(menu);
-
-        Label endGameLabel = new Label();
-
-        endGameLabel.setId("endGame");
-        endGameLabel.setFont(new Font("System", 50));
-        endGameLabel.setStyle("-fx-background-color: #e3e3e3");
-        endGameLabel.setTranslateX(500);
-        endGameLabel.setTranslateY(400);
-        game.getChildren().add(endGameLabel);
+        Pane pane=new Pane();
+        pane.setId("endGame");
+        pane.setTranslateX(460);
+        pane.setTranslateY(400);
+        game.getChildren().add(pane);
 
         MenuItem restart = new MenuItem("Restart");
         MenuItem changeBG = new MenuItem("Change Backgorund");
         MenuItem changeFront = new MenuItem("Change Front of Cards");
         MenuItem changeBack = new MenuItem("Change Back of Cards");
-
 
 
         menu.getItems().add(restart);
@@ -106,7 +108,6 @@ public class Klondike extends Application {
                     currentBack+=1;
                 }
                 else{currentBack=1;}
-                System.out.println(Card.changeCardback());
 
                 Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");
 //                start(primaryStage);
@@ -138,10 +139,6 @@ public class Klondike extends Application {
                         }
                     }
                 }
-
-
-                System.out.println(game.getTableauPiles());
-
             }
         });
 
@@ -194,7 +191,10 @@ public class Klondike extends Application {
 
         primaryStage.setTitle("Klondike Solitaire");
         scene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
+        primaryStage.getIcons().add(new Image("logo.png"));
         primaryStage.setScene(scene);
+        addEndLabel();
+
         primaryStage.show();
     }
 
