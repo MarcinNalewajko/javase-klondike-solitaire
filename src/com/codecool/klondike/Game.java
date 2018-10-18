@@ -55,6 +55,23 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         if (e.getClickCount() == 2) {
             System.out.println("Double click");
+
+            if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU) {
+                for (Pile pile: foundationPiles) {
+                    if (isMoveValid( card, pile)) {
+                        List<Card> oneCardList = new ArrayList<>();
+                        oneCardList.add(card);
+                        MouseUtil.slideToDest(oneCardList, pile);
+                        
+                        break;
+                    }
+                }
+
+                card.setMouseTransparent(false);
+                // System.out.println("Placed " + card + " to the waste.");
+
+            }
+
         }
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
@@ -199,7 +216,7 @@ public class Game extends Pane {
                 }
             }
         }
-        return false;
+        return true;
     }
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
