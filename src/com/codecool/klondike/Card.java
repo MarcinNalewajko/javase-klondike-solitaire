@@ -65,6 +65,11 @@ public class Card extends ImageView {
 
     }
 
+    public void changeCardfront(Card card){
+        card.frontFace=cardFaceImages.get(getShortName());
+
+    }
+
     public Suit getSuit() {
         return suit;
     }

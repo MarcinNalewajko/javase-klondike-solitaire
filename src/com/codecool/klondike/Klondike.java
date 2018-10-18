@@ -126,7 +126,34 @@ public class Klondike extends Application {
                 }
                 else{currentFront=1;}
                 Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");//                primaryStage.show();
-                start(primaryStage);
+
+
+                for(Card card:game.getDeck()){
+                    card.changeCardfront(card);
+                    if (card.isFaceDown()){}
+                    else{
+                        card.setImage(card.getFrontFace());
+                    }
+                }
+
+                for (Pile pile:game.getTableauPiles()){
+                    for(Card card:pile.getCards()){
+                        card.changeCardfront(card);
+                        if (card.isFaceDown()){}
+                        else{
+                            card.setImage(card.getFrontFace());
+                        }
+                    }
+                }
+                for (Pile pile:game.getFoundationPiles()){
+                    for(Card card:pile.getCards()){
+                        card.changeCardfront(card);
+                        if (card.isFaceDown()){}
+                        else{
+                            card.setImage(card.getFrontFace());
+                        }
+                    }
+                }
             }
         });
 
