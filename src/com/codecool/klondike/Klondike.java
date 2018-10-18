@@ -46,6 +46,7 @@ public class Klondike extends Application {
     public void start(Stage primaryStage) {
 
         Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");
+        System.out.println(Card.cardBackImage);
         Game game = new Game();
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("Menu");
@@ -105,8 +106,42 @@ public class Klondike extends Application {
                     currentBack+=1;
                 }
                 else{currentBack=1;}
-                Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");//                primaryStage.show();
-                start(primaryStage);
+                System.out.println(Card.changeCardback());
+
+                Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");
+//                start(primaryStage);
+                for(Card card:game.getDeck()){
+                    card.changeCardback(card,new Image(backPath+currentBack+"/"+"card_back.png", Card.WIDTH,Card.HEIGHT, false,true));
+                    if (card.isFaceDown()){
+                    card.setImage(card.getBackFace());
+                    }
+                    else{}
+                }
+
+                for (Pile pile:game.getTableauPiles()){
+                    for(Card card:pile.getCards()){
+                        card.changeCardback(card,new Image(backPath+currentBack+"/"+"card_back.png", Card.WIDTH,Card.HEIGHT, false,true));
+                        if (card.isFaceDown()){
+                            card.setImage(card.getBackFace());
+                        }
+                        else{}
+                    }
+                }
+                for (Pile pile:game.getFoundationPiles()){
+                    for(Card card:pile.getCards()){
+                        card.changeCardback(card,new Image(backPath+currentBack+"/"+"card_back.png", Card.WIDTH,Card.HEIGHT, false,true));
+                        if (card.isFaceDown()){
+                            card.setImage(card.getBackFace());
+                        }
+                        else{
+
+                        }
+                    }
+                }
+
+
+                System.out.println(game.getTableauPiles());
+
             }
         });
 
@@ -121,7 +156,34 @@ public class Klondike extends Application {
                 }
                 else{currentFront=1;}
                 Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");//                primaryStage.show();
-                start(primaryStage);
+
+
+                for(Card card:game.getDeck()){
+                    card.changeCardfront(card);
+                    if (card.isFaceDown()){}
+                    else{
+                        card.setImage(card.getFrontFace());
+                    }
+                }
+
+                for (Pile pile:game.getTableauPiles()){
+                    for(Card card:pile.getCards()){
+                        card.changeCardfront(card);
+                        if (card.isFaceDown()){}
+                        else{
+                            card.setImage(card.getFrontFace());
+                        }
+                    }
+                }
+                for (Pile pile:game.getFoundationPiles()){
+                    for(Card card:pile.getCards()){
+                        card.changeCardfront(card);
+                        if (card.isFaceDown()){}
+                        else{
+                            card.setImage(card.getFrontFace());
+                        }
+                    }
+                }
             }
         });
 
