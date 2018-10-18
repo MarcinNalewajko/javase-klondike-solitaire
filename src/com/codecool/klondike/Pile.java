@@ -56,6 +56,11 @@ public class Pile extends Pane {
         card.toFront();
         layoutCard(card);
     }
+
+    public void addCardNoViewMethods(Card card) {
+        cards.add(card);
+        card.setContainingPile(this);
+    }
     
     private void layoutCard(Card card) {
         card.relocate(card.getLayoutX() + card.getTranslateX(), card.getLayoutY() + card.getTranslateY());

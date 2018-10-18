@@ -56,24 +56,29 @@ public class Game extends Pane {
         if (e.getClickCount() == 2) {
             System.out.println("Double click");
 
-            if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU) {
+            if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU ||
+                    card.getContainingPile().getPileType() == Pile.PileType.DISCARD) {
                 for (Pile pile: foundationPiles) {
+
                     if (isMoveValid( card, pile)) {
+                        Pile oldPile = card.getContainingPile();
                         List<Card> oneCardList = new ArrayList<>();
                         oneCardList.add(card);
                         MouseUtil.slideToDest(oneCardList, pile);
-                        
+                        oldPile.getCards().remove(card);
+                        if (oldPile.getCards().size() > 0 && oldPile.getTopCard().isFaceDown()) {
+                            oldPile.getTopCard().flip();
+                        }
+                        card.setContainingPile(pile);
+                        pile.addCardNoViewMethods(card);
                         break;
                     }
                 }
-
                 card.setMouseTransparent(false);
-                // System.out.println("Placed " + card + " to the waste.");
-
+                System.out.println("Placed " + card + " to the foundation.");
             }
-
         }
-        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
+        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK && e.getClickCount() == 1) {
             card.moveToPile(discardPile);
             card.flip();
             card.setMouseTransparent(false);
