@@ -108,6 +108,17 @@ public class Klondike extends Application {
                         else{}
                     }
                 }
+                for (Pile pile:game.getFoundationPiles()){
+                    for(Card card:pile.getCards()){
+                        card.changeCardback(card,new Image(backPath+currentBack+"/"+"card_back.png", Card.WIDTH,Card.HEIGHT, false,true));
+                        if (card.isFaceDown()){
+                            card.setImage(card.getBackFace());
+                        }
+                        else{
+
+                        }
+                    }
+                }
 
 
                 System.out.println(game.getTableauPiles());
