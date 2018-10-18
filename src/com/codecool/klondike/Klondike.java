@@ -46,7 +46,6 @@ public class Klondike extends Application {
     public void start(Stage primaryStage) {
 
         Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");
-        System.out.println(Card.cardBackImage);
         Game game = new Game();
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("Menu");
@@ -106,7 +105,6 @@ public class Klondike extends Application {
                     currentBack+=1;
                 }
                 else{currentBack=1;}
-                System.out.println(Card.changeCardback());
 
                 Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");
 //                start(primaryStage);
@@ -138,10 +136,6 @@ public class Klondike extends Application {
                         }
                     }
                 }
-
-
-                System.out.println(game.getTableauPiles());
-
             }
         });
 
