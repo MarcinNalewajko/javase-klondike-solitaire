@@ -16,7 +16,21 @@ public class Card extends ImageView {
 
     private Suit suit;
     private Rank rank;
+
+
     private boolean faceDown;
+
+    public Image getBackFace() {
+        return backFace;
+    }
+
+    public Image getFrontFace() {
+        return frontFace;
+    }
+
+    public static Image getCardBackImage() {
+        return cardBackImage;
+    }
 
     private Image backFace;
     private Image frontFace;
@@ -25,7 +39,7 @@ public class Card extends ImageView {
 
 
 
-    static Image cardBackImage;
+    public static Image cardBackImage;
     private static final Map<String, Image> cardFaceImages = new HashMap<>();
     public static final int WIDTH = 150;
     public static final int HEIGHT = 215;
@@ -39,6 +53,16 @@ public class Card extends ImageView {
         frontFace = cardFaceImages.get(getShortName());
         setImage(faceDown ? backFace : frontFace);
         setEffect(dropShadow);
+    }
+
+
+    public static Map<String, Image> changeCardback(){
+        return cardFaceImages;
+
+    };
+    public void changeCardback(Card card,Image image){
+        card.backFace=image;
+
     }
 
     public Suit getSuit() {

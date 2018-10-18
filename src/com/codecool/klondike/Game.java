@@ -18,11 +18,26 @@ import java.util.*;
 
 public class Game extends Pane {
 
-    private List<Card> deck = new ArrayList<>();
+
+    public static List<Card> getDeck() {
+        return deck;
+    }
+
+    private static List<Card> deck = new ArrayList<>();
 
     private Pile stockPile;
     private Pile discardPile;
+
+    public List<Pile> getFoundationPiles() {
+        return foundationPiles;
+    }
+
     private List<Pile> foundationPiles = FXCollections.observableArrayList();
+
+    public List<Pile> getTableauPiles() {
+        return tableauPiles;
+    }
+
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
 
     private double dragStartX, dragStartY;
@@ -31,8 +46,6 @@ public class Game extends Pane {
     private static double STOCK_GAP = 1;
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
-
-
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
