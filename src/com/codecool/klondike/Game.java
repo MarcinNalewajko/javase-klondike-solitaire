@@ -76,6 +76,11 @@ public class Game extends Pane {
                 }
                 card.setMouseTransparent(false);
                 System.out.println("Placed " + card + " to the foundation.");
+                if (isGameWon()) {
+                    this.isGameOn = false;
+                    System.out.println("WON WON WON");
+                    Klondike.addEndLabel();
+                }
             }
         }
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK && e.getClickCount() == 1) {
