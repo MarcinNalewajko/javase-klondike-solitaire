@@ -193,7 +193,7 @@ public class Klondike extends Application {
         scene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.getIcons().add(new Image("logo.png"));
         primaryStage.setScene(scene);
-        addEndLabel();
+        // addEndLabel();
 
         primaryStage.show();
     }
