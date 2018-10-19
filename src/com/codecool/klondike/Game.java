@@ -83,7 +83,8 @@ public class Game extends Pane {
                 }
             }
         }
-        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK && e.getClickCount() == 1) {
+        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK && e.getClickCount() == 1 &&
+        card.getContainingPile().getTopCard() == card) {
             card.moveToPile(discardPile);
             card.flip();
             card.setMouseTransparent(false);
