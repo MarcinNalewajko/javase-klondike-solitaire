@@ -1,5 +1,8 @@
 package com.codecool.klondike;
 
+import java.util.concurrent.TimeUnit;
+
+
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
@@ -16,12 +19,19 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import javax.sound.midi.Soundbank;
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class Game extends Pane {
 
     private boolean isGameOn = true;
-    
+
+    private static int fromTableauFlipsCounter = 0;
+
+    public static List<Card> cardsToAutoMove = new ArrayList<>();
+
+    public static List<Pile> foundationPilesToAutoMoveTo = new ArrayList<>();
+
     public static List<Card> getDeck() {
         return deck;
     }
@@ -54,7 +64,7 @@ public class Game extends Pane {
         if (!isGameOn) return;
         Card card = (Card) e.getSource();
         if (e.getClickCount() == 2) {
-            System.out.println("Double click");
+            // System.out.println("Double click");
 
             if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU ||
                     card.getContainingPile().getPileType() == Pile.PileType.DISCARD) {
@@ -67,7 +77,9 @@ public class Game extends Pane {
                         MouseUtil.slideToDest(oneCardList, pile);
                         oldPile.getCards().remove(card);
                         if (oldPile.getCards().size() > 0 && oldPile.getTopCard().isFaceDown()) {
-                            oldPile.getTopCard().flip();
+                            oldPile.getTopCard().flip();    // YES for flipcounter
+
+                            if (oldPile.getPileType() == Pile.PileType.TABLEAU) { fromTableauFlipsCounter++; }
                         }
                         card.setContainingPile(pile);
                         pile.addCardNoViewMethods(card);
@@ -80,10 +92,15 @@ public class Game extends Pane {
         }
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK && e.getClickCount() == 1) {
             card.moveToPile(discardPile);
-            card.flip();
+            card.flip();                        // no for flipcounter
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
 
+        }
+        // check for autoFinish condition
+        if (doesQualifyForAutoFinish()) {
+            System.out.println("AUTO FINISH");
+            autoFinish();
         }
 
     };
@@ -153,11 +170,17 @@ public class Game extends Pane {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
+        // check for autoFinish condition
+        if (doesQualifyForAutoFinish()) {
+            System.out.println("AUTO FINISH");
+            autoFinish();
+        }
     };
 
 
     public boolean isGameWon() {
         //TODO
+        int numberOfCardsOnTopToWin = 28;
         for (int it = 0; it < foundationPiles.size(); it++) {
             if ((foundationPiles.get(it).isEmpty()) || (foundationPiles.get(it).getTopCard().getRank() != Rank.KING)) {
                 break;
@@ -165,7 +188,48 @@ public class Game extends Pane {
                 if (it == 3) { return true;}
             }
         }
+
+        int sum = 0;
+        for (Pile pile: foundationPiles) {
+            sum += pile.numOfCards();
+        }
+        if (sum == numberOfCardsOnTopToWin) return true;
         return false;
+    }
+
+    public boolean doesQualifyForAutoFinish() {
+        if ((fromTableauFlipsCounter == 21)) {
+//                (stockPile.isEmpty()) &&
+//                (discardPile.isEmpty())) {
+            return true;
+        }
+        return false;
+    }
+
+    public void autoFinish() {
+        System.out.println("auto finishing initiated");
+        while (!isGameWon()) {
+
+            for (Pile pile: tableauPiles) {
+                if (isGameWon()) {break;}
+                if (pile.isEmpty()) {
+                    continue;
+                }
+
+                Card card = pile.getTopCard();
+                System.out.println(card);
+
+                for (Pile foundationPile: foundationPiles) {
+                    
+                    if (isMoveValid(card, foundationPile)) {
+                        card.moveToPile(foundationPile);
+                        break;
+                    }
+                }
+            }
+        }
+        System.out.println("Auto finish done");
+        Klondike.addEndLabel();
     }
 
     public Game() {
@@ -188,7 +252,7 @@ public class Game extends Pane {
         stockPile.clear();
 
         for (Card card: cardsToRefill){
-            card.flip();
+            card.flip();    // no for flipcounter
             stockPile.addCard(card);
         }
         discardPile.clear();
@@ -198,7 +262,9 @@ public class Game extends Pane {
     public boolean isMoveValid(Card card, Pile destPile) {
         //TODO
         Pile.PileType pileType = destPile.getPileType();
+        // System.out.println(card.getContainingPile().getCards());
         Rank cardRank = card.getRank();
+        // System.out.println(cardRank);
         Card topCard = destPile.getTopCard();
         if (destPile.isEmpty()) {
 
@@ -252,7 +318,8 @@ public class Game extends Pane {
         if ((card.getContainingPile().getPileType() == Pile.PileType.TABLEAU) &&
                 (card.getContainingPile().numOfCards() > 1) &&
                 (cardsFromPreviousPile.get(indexOfACardToFlip).isFaceDown())) {
-            cardsFromPreviousPile.get(indexOfACardToFlip).flip();
+            cardsFromPreviousPile.get(indexOfACardToFlip).flip();       // YES for flipcounter
+            fromTableauFlipsCounter++;
         }
     }
 
@@ -324,7 +391,7 @@ public class Game extends Pane {
                 deck.remove(dealPiles.get(j));
 
             }
-            tableauPiles.get(i-1).getTopCard().flip();
+            tableauPiles.get(i-1).getTopCard().flip();      // no for flipcounter
 
         }
 

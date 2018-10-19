@@ -1,5 +1,6 @@
 package com.codecool.klondike;
 
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -52,6 +53,7 @@ public class Klondike extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
 
         Card.loadCardImages(backPath+currentBack+"/", frontPath+currentFront+"/");
         Game game = new Game();
@@ -193,7 +195,7 @@ public class Klondike extends Application {
         scene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.getIcons().add(new Image("logo.png"));
         primaryStage.setScene(scene);
-        addEndLabel();
+        // addEndLabel();
 
         primaryStage.show();
     }
